@@ -19,9 +19,39 @@ class ink(object):
         self.width = width
         self.height = height
         self.color = (255, 255, 255)
+        self.neighbors = []
 
     def draw(self, canvas):
         pygame.draw.rect(canvas, self.color, (self.x, self.y, self.x + self.width, self.y + self.height))
+
+    def getNeighbors(self, canvas):
+        col = self.x // 20
+        row = self.y // 20
+
+        col_count = 5
+        row_count = 5
+
+        # Get Horizontal Neighbors
+        if row < col_count - 1: # Right
+            self.neighbors.append(canvas.lines[row + 1][col])
+        if row > 0: # Left
+            self.neighbors.append(canvas.lines[row - 1][col])
+
+        # Get Vertical Neighbors
+        if col < row_count - 1: # Up
+            self.neighbors.append(canvas.lines[row][col + 1])
+        if col > 0:  # Down
+            self.neighbors.append(canvas.lines[row][col - 1])
+
+        # Get Diagnal Neighbors
+        if col > 0 and row > 0: # Top Left
+            self.neighbors.append(canvas.lines[row - 1][col - 1])
+        if col + 1 < row_count and row > -1 and row - 1 > 0: # Bottom Left
+            self.neighbors.append(canvas.lines[row - 1][col + 1])
+        if row_count > col - 1 > 0 and row < col_count - 1: # Top Right
+            self.neighbors.append(canvas.lines[row + 1][col -1])
+        if col < row_count - 1 and row < col_count - 1:
+            self.neighbors.append(canvas.lines[row + 1][col + 1])
 
 class grid(object):
     def __init__(self, rows, cols, width, height):
@@ -49,6 +79,10 @@ class grid(object):
             for col in range(self.cols):
                 self.lines[row].append(ink(x_spacing * col, y_spacing * row, x_spacing, y_spacing))
 
+        for row in range(self.rows):
+            for col in range(self.cols):
+                self.lines[row][col].getNeighbors(self)
+
     def clicked(self, pos):
         t = pos[0]
         w = pos[1]
@@ -66,25 +100,28 @@ def main():
                 running = False
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
-                clicked = g.clicked(pos)
+                clicked = canvas.clicked(pos)
                 clicked.color = (0, 0, 0)
+
+                for neighbor in clicked.neighbors:
+                    neighbor.color = (0, 0, 0)
 
             if pygame.mouse.get_pressed()[2]:
                 try:
                     pos = pygame.mouse.get_pos()
-                    clicked = g.clicked(pos)
+                    clicked = canvas.clicked(pos)
                     clicked.colors = (255, 255, 255)
                 except:
                     pass
 
-        g.draw(win)
+        canvas.draw(win)
         pygame.display.update()
 
 pygame.init()
 width = height = 560
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Draw a Number")
-g = grid(28, 28, width, height)
+canvas = grid(28, 28, width, height)
 main()
 
 pygame.quit()
