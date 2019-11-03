@@ -13,20 +13,21 @@ sys.stdout = stdout
 sys.stderr = stderr
 
 class ink(object):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, scale):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.color = (255, 255, 255)
+        self.scale = scale
         self.neighbors = []
 
     def draw(self, canvas):
         pygame.draw.rect(canvas, self.color, (self.x, self.y, self.x + self.width, self.y + self.height))
 
     def getNeighbors(self, canvas):
-        col = self.x // 20
-        row = self.y // 20
+        col = self.x // self.scale
+        row = self.y // self.scale
 
         col_count = 5
         row_count = 5
@@ -54,13 +55,14 @@ class ink(object):
             self.neighbors.append(canvas.lines[row + 1][col + 1])
 
 class grid(object):
-    def __init__(self, rows, cols, width, height):
+    def __init__(self, rows, cols, width, height, scale):
         self.rows = rows
         self.cols = cols
         self.width = width
         self.height = height
         self.length = rows + cols
         self.lines = []
+        self.scale = scale
         self.generateLines()
         pass
 
@@ -77,7 +79,7 @@ class grid(object):
         for row in range(self.rows):
             self.lines.append([])
             for col in range(self.cols):
-                self.lines[row].append(ink(x_spacing * col, y_spacing * row, x_spacing, y_spacing))
+                self.lines[row].append(ink(x_spacing * col, y_spacing * row, x_spacing, y_spacing, self.scale))
 
         for row in range(self.rows):
             for col in range(self.cols):
@@ -114,14 +116,16 @@ def main():
                 except:
                     pass
 
-        canvas.draw(win)
+        canvas.draw(window)
         pygame.display.update()
 
 pygame.init()
-width = height = 560
-win = pygame.display.set_mode((width, height))
+width = 720
+height = 720
+scale = 18
+window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Draw a Number")
-canvas = grid(28, 28, width, height)
+canvas = grid(width // scale, height // scale, width, height, scale)
 main()
 
 pygame.quit()
