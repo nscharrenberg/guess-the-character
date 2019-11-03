@@ -51,7 +51,7 @@ class ink(object):
             self.neighbors.append(canvas.lines[row - 1][col + 1])
         if row_count > col - 1 > 0 and row < col_count - 1: # Top Right
             self.neighbors.append(canvas.lines[row + 1][col -1])
-        if col < row_count - 1 and row < col_count - 1:
+        if col < row_count - 1 and row < col_count - 1: # Bottom Right
             self.neighbors.append(canvas.lines[row + 1][col + 1])
 
 class grid(object):
@@ -86,10 +86,8 @@ class grid(object):
                 self.lines[row][col].getNeighbors(self)
 
     def clicked(self, pos):
-        t = pos[0]
-        w = pos[1]
-        g1 = int(t) // self.lines[0][0].width
-        g2 = int(w) // self.lines[0][0].height
+        g1 = int(pos[0]) // self.lines[0][0].width
+        g2 = int(pos[1]) // self.lines[0][0].height
 
         return self.lines[g2][g1]
 
