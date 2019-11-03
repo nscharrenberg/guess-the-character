@@ -14,8 +14,10 @@ for train in range(len(train_x)):
             if train_x[train][row][col] != 0:
                 train_x[train][row][col] = 1
 
-model = tensor.keras.models.load_model('number.model')
-predictions = model.predict(test_x[:200])
+model_name = 'number.model'
+model = tensor.keras.models.load_model(model_name)
+iterations = 50
+predictions = model.predict(test_x[:iterations])
 
 count = 0
 
