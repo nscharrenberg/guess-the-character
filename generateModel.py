@@ -25,7 +25,7 @@ model.compile(
     metrics= ['accuracy']
 )
 
-model.fit(train_x, train_y, epochs = 10)
+model.fit(train_x, train_y, epochs = 30)
 model.save('number.model')
 
 print("A Model has been generated and stored on your computer")

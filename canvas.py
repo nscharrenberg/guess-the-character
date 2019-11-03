@@ -30,8 +30,8 @@ class ink(object):
         col = self.x // self.scale
         row = self.y // self.scale
 
-        col_count = 5
-        row_count = 5
+        col_count = 28
+        row_count = 28
 
         # Get Horizontal Neighbors
         if row < col_count - 1: # Right
@@ -153,9 +153,9 @@ def main():
         pygame.display.update()
 
 pygame.init()
-width = 560
-height = 560
-scale = 20
+width = 720
+height = 720
+scale = 25
 background_color = (255, 255, 255)
 pencil_color = (0, 0, 0)
 dataset = tensor.keras.datasets.mnist # Dataset of Handwritings
