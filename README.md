@@ -1,5 +1,5 @@
-# guess-the-number
-A simple prototyping project for a Neural Network that guesses the number you draw
+# Guess the Character
+A simple prototyping project for a Neural Network that guesses the character you draw
 
 # Used Tools
 - Python 3
