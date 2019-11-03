@@ -1,9 +1,9 @@
 import sys, os
 import pygame
-import matplotlib.pyplot as plt
-import numpy as np
 from tkinter import *
 from tkinter import messagebox
+import matplotlib.pyplot as plt
+import numpy as np
 stdout = sys.__stdout__
 stderr = sys.__stderr__
 sys.stdout = open(os.devnull, 'w')
@@ -13,12 +13,12 @@ sys.stdout = stdout
 sys.stderr = stderr
 
 class ink(object):
-    def __init__(self, x, y, width, height, scale):
+    def __init__(self, x, y, width, height, scale, color):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-        self.color = (255, 255, 255)
+        self.color = color
         self.scale = scale
         self.neighbors = []
 
@@ -55,7 +55,7 @@ class ink(object):
             self.neighbors.append(canvas.lines[row + 1][col + 1])
 
 class grid(object):
-    def __init__(self, rows, cols, width, height, scale):
+    def __init__(self, rows, cols, width, height, scale, color):
         self.rows = rows
         self.cols = cols
         self.width = width
@@ -63,6 +63,7 @@ class grid(object):
         self.length = rows + cols
         self.lines = []
         self.scale = scale
+        self.color = color
         self.generateLines()
         pass
 
@@ -79,7 +80,7 @@ class grid(object):
         for row in range(self.rows):
             self.lines.append([])
             for col in range(self.cols):
-                self.lines[row].append(ink(x_spacing * col, y_spacing * row, x_spacing, y_spacing, self.scale))
+                self.lines[row].append(ink(x_spacing * col, y_spacing * row, x_spacing, y_spacing, self.scale, self.color))
 
         for row in range(self.rows):
             for col in range(self.cols):
@@ -101,16 +102,16 @@ def main():
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
                 clicked = canvas.clicked(pos)
-                clicked.color = (0, 0, 0)
+                clicked.color = pencil_color
 
                 for neighbor in clicked.neighbors:
-                    neighbor.color = (0, 0, 0)
+                    neighbor.color = pencil_color
 
             if pygame.mouse.get_pressed()[2]:
                 try:
                     pos = pygame.mouse.get_pos()
                     clicked = canvas.clicked(pos)
-                    clicked.colors = (255, 255, 255)
+                    clicked.colors = background_color
                 except:
                     pass
 
@@ -121,9 +122,11 @@ pygame.init()
 width = 720
 height = 720
 scale = 18
+background_color = (255, 255, 255)
+pencil_color = (255, 0, 0)
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Draw a Number")
-canvas = grid(width // scale, height // scale, width, height, scale)
+canvas = grid(width // scale, height // scale, width, height, scale, background_color)
 main()
 
 pygame.quit()
